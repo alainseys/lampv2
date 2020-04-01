@@ -1,0 +1,42 @@
+version: '3.3'
+services: 
+    web:
+        build: 
+            context: ./php
+            dockerfile: Dockerfile
+        container_name: php73
+        volumes: 
+            - ./public_html:/var/www/html
+            - ./apache2/logs/access.log:/var/log/apache2/access.log
+            - ./apache2/logs/error.log:/var/log/apache2/error.log
+            - ./php/php.ini:/usr/local/etc/php/php.ini
+        ports:
+            - 8000:80
+    db:
+        image: mysql:8.0
+        container_name: mysql8
+        command: --default-authentication-plugin=mysql_native_password
+        restart: always
+        environment: 
+            MYSQL_ROOT: root
+            MYSQL_ROOT_PASSWORD : root
+            MYSQL_DATABASE: development
+            MYSQL_USER: devuser
+            MYSQL_PASSWORD: devpassword
+        ports: 
+            - 3306:3306
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        container_name: phpmyadmin
+        links:
+            - db
+        environment: 
+            PMA_HOST: db
+            PMA_PORT: 3306
+            PMA_USER: devuser
+            PMA_PASSWORD: devpassword
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_USER: root
+            MYSQL_PASSWORD: devpassword
+        ports: 
+            - 8080:80
