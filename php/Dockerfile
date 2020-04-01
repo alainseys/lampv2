@@ -16,5 +16,4 @@ RUN apt-get install php-xml -y
 RUN apt-get install libapache2-mod-php -y
 RUN apt-get install php-xdebug -y
 RUN apt-get install composer -y
-RUN apt-get install php-devel -y
 EXPOSE 80
